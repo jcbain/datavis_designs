@@ -8,8 +8,8 @@ var scroller = scrollama();
 // generic window resize listener event
 function handleResize() {
     // 1. update height of step elements
-    var stepH = Math.floor(window.innerHeight * 0.75);
-    step.style('height', stepH + 'px');
+    // var stepH = Math.floor(window.innerHeight * 0.75);
+    // step.style('height', stepH + 'px');
     var figureHeight = window.innerHeight; 
     var figureMarginTop = (window.innerHeight - figureHeight) / 2;
     figure
@@ -44,7 +44,7 @@ function init() {
     scroller.setup({
         step: '#scrolly article .step',
         offset: 0.33,
-        debug: true,
+        debug: false,
     })
         .onStepEnter(handleStepEnter)
     // setup resize event
