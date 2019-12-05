@@ -1,4 +1,4 @@
-alleles = d3.json('../data/m1e-2_mu1e-6_r1e-6_sigsqr5_alleles_md.json');
+alleles = d3.json('../data/alleles_md.json');
 
 Promise.all([alleles]).then((values) => {
     let data = values[0];
