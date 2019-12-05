@@ -311,7 +311,7 @@ function drawNodes(targetCenter) {
       .attr("r", 3 );
 	}
   
-  let force = d3.forceSimulation()
+  let simulation = d3.forceSimulation()
   // keep entire simulation balanced around screen center
   .force('center', d3.forceCenter(targetCenter.x, targetCenter.y))
 
@@ -354,7 +354,7 @@ const draw2 = () => {
   .style("fill", function(d) { return color[d.cluster]; });
   }
 
-  let force = d3.forceSimulation()
+  let simulation = d3.forceSimulation()
   // keep entire simulation balanced around screen center
   .force('center', d3.forceCenter(chartCenterX, chartCenterY))
 
