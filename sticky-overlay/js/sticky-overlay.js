@@ -1,3 +1,5 @@
+// inspiration from https://interactive.carbonbrief.org/how-uk-transformed-electricity-supply-decade/#
+//     and for color https://www.awwwards.com/sites/misato-town
 let main = d3.select('main')
 let scrolly = main.select('#scrolly');
 let figure = scrolly.select('figure');
