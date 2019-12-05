@@ -198,26 +198,26 @@ init();
 // A N I M A T I O N S
 // - - - - - - - - - - -
 
-let svgWidth = '100%',
-    svgHeight = '100%',
+let widthSVG = '100%',
+    heightSVG = '100%',
     padding = 2, // separation between same-color nodes
-    clusterPadding = 60, // separation between different-color nodes
+    clusterPadding = 6, // separation between different-color nodes
     maxRadius = 2 // max radius of individual circles
-    chartCenterY = window.innerHeight/2
-    chartCenterX = window.innerWidth/2;
 
-const n = 20, // total number of nodes
+const n = 2000, // total number of nodes
     m = 2; // number of distinct clusters
 
-const color = d3.scaleSequential(d3.interpolateRainbow)
-    .domain(d3.range(m));
+// const color = d3.scaleSequential(d3.interpolateRainbow)
+//     .domain(d3.range(m));
+
+const color = ['#545f97', '#fd5d67'];
 
 // The largest node for each cluster.
 const clusters = new Array(m);
 
-const getNodes = () => {
+let getNodes = () => {
   
-  const dist = 200;	
+  let dist = 2000;	
   
   return d3.range(n).map(function() {
     let i = Math.floor(Math.random() * m),
@@ -225,8 +225,8 @@ const getNodes = () => {
         d = {
           cluster: i,
           radius: r,
-          x: Math.cos(i / m * 2 * Math.PI) * dist + Math.random(),
-          y: Math.sin(i / m * 2 * Math.PI) * dist + Math.random()
+          x: Math.cos(i / m * 2 * Math.PI) * 10 + Math.random(),
+          y: Math.sin(i / m * 2 * Math.PI) * 10 + Math.random()
         };
     if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
     return d;
@@ -234,13 +234,18 @@ const getNodes = () => {
 }  
 
 let nodes = getNodes();
-   
+
 const svg = figure.append("svg")
-    .attr("width", svgWidth)
-    .attr("height", svgHeight)
+    .attr("width", widthSVG)
+    .attr("height", heightSVG)
     .attr('id', 'pop')
     .attr('width', '100%')
     .attr('height', '100%');
+
+  let popSVG = document.getElementById('pop');
+
+  let chartCenterY = popSVG.clientHeight/2;
+  let chartCenterX = popSVG.clientWidth/2;
 
 // Move d to be adjacent to the cluster node.
 // from: https://bl.ocks.org/mbostock/7881887
@@ -293,19 +298,19 @@ const removeAll = () => {
   
 function drawNodes(targetCenter) {
     
-  const node = svg.selectAll("circle")
+  let node = svg.selectAll("circle")
     .data(nodes)
   .enter().append("circle")
-    .style("fill", function(d) { return color(d.cluster/10); });
+    .style("fill", function(d) { return color[d.cluster]; });
   
-  const layoutTick = e => {
+  let layoutTick = e => {
   	node
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", 3 );
 	}
   
-  const force = d3.forceSimulation()
+  let force = d3.forceSimulation()
   // keep entire simulation balanced around screen center
   .force('center', d3.forceCenter(targetCenter.x, targetCenter.y))
 
