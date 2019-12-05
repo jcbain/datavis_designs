@@ -29,7 +29,8 @@ function handleStepEnter(response) {
         return i === response.index;
     })
     // update graphic based on step
-    figure.select('p').text(response.index + 1);
+    // figure.select('p').text(response.index + 1);
+    updateFunctions[response.index]();
 }
 function setupStickyfill() {
     d3.selectAll('.sticky').each(function () {
@@ -192,10 +193,13 @@ function init() {
 
 // kick things off
 init();
-// draw();
 
-let width = window.innerWidth,
-    height = window.innerHeight,
+// - - - - - - - - - - - 
+// A N I M A T I O N S
+// - - - - - - - - - - -
+
+let svgWidth = '100%',
+    svgHeight = '100%',
     padding = 2, // separation between same-color nodes
     clusterPadding = 60, // separation between different-color nodes
     maxRadius = 2 // max radius of individual circles
@@ -232,8 +236,8 @@ const getNodes = () => {
 let nodes = getNodes();
    
 const svg = figure.append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", svgWidth)
+    .attr("height", svgHeight)
     .attr('id', 'pop')
     .attr('width', '100%')
     .attr('height', '100%');
@@ -328,4 +332,15 @@ const draw = () => {
 
 }
 
-draw();
+    // create d3 range object to store d3 operations
+    let updateFunctions = d3.range(
+      d3.selectAll('#sections > div')
+          .size()
+          )
+      .map(function(){ 
+          return function(){} 
+      });
+
+  updateFunctions[0] = draw;
+
+  // updateFunctions[2] = thirdAction;
