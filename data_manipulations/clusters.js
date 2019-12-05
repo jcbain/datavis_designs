@@ -19,7 +19,7 @@ const clusters = new Array(m);
 
 const getNodes = () => {
   
-  const dist = 200;	
+  const dist = 20;	
   
   return d3.range(n).map(function() {
     let i = Math.floor(Math.random() * m),

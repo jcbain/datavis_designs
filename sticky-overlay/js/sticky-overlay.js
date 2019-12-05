@@ -217,7 +217,7 @@ const clusters = new Array(m);
 
 let getNodes = () => {
   
-  let dist = 2000;	
+  let dist = 20;	
   
   return d3.range(n).map(function() {
     let i = Math.floor(Math.random() * m),
@@ -225,8 +225,8 @@ let getNodes = () => {
         d = {
           cluster: i,
           radius: r,
-          x: Math.cos(i / m * 2 * Math.PI) * 10 + Math.random(),
-          y: Math.sin(i / m * 2 * Math.PI) * 10 + Math.random()
+          x: Math.cos(i / m * 2 * Math.PI) * dist + Math.random(),
+          y: Math.sin(i / m * 2 * Math.PI) * dist + Math.random()
         };
     if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
     return d;
@@ -235,7 +235,7 @@ let getNodes = () => {
 
 let nodes = getNodes();
 
-const svg = figure.append("svg")
+let svg = figure.append("svg")
     .attr("width", widthSVG)
     .attr("height", heightSVG)
     .attr('id', 'pop')
@@ -249,10 +249,10 @@ const svg = figure.append("svg")
 
 // Move d to be adjacent to the cluster node.
 // from: https://bl.ocks.org/mbostock/7881887
-const cluster = () => {
+let cluster = () => {
 
   var nodes,
-    strength = 1;
+      strength = 1;
 
   function force (alpha) {
 
@@ -295,13 +295,14 @@ const cluster = () => {
 const removeAll = () => {
   const node = svg.selectAll("circle").remove();
 }
-  
+
 function drawNodes(targetCenter) {
     
   let node = svg.selectAll("circle")
     .data(nodes)
-  .enter().append("circle")
-    .style("fill", function(d) { return color[d.cluster]; });
+    .enter()
+    .append("circle")
+    .style("fill", '#71c18c');
   
   let layoutTick = e => {
   	node
@@ -337,6 +338,40 @@ const draw = () => {
 
 }
 
+const draw2 = () => {
+  nodes.forEach(d =>  {
+    let dist = 200;
+    d.x = Math.cos(d.cluster / m * 2 * Math.PI) * dist + Math.random();
+    d.y = Math.sin(d.cluster / m * 2 * Math.PI) * dist + Math.random();
+  });
+
+  let node = svg.selectAll("circle");
+  
+
+  let layoutTick = e => {
+  	node.transition().attr("cx", function(d) { return d.x; })
+  .attr("cy", function(d) { return d.y; })
+  .style("fill", function(d) { return color[d.cluster]; });
+  }
+
+  let force = d3.forceSimulation()
+  // keep entire simulation balanced around screen center
+  .force('center', d3.forceCenter(chartCenterX, chartCenterY))
+
+  // cluster by section
+  .force('cluster', cluster()
+    .strength(0.2))
+
+  // apply collision with padding
+  .force('collide', d3.forceCollide(d => d.radius + padding)
+    .strength(0.7))
+
+  .on('tick', layoutTick)
+	.nodes(nodes);
+
+
+}
+
     // create d3 range object to store d3 operations
     let updateFunctions = d3.range(
       d3.selectAll('#sections > div')
@@ -347,5 +382,6 @@ const draw = () => {
       });
 
   updateFunctions[0] = draw;
+  updateFunctions[1] = draw2;
 
   // updateFunctions[2] = thirdAction;
