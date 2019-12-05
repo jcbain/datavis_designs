@@ -1,3 +1,5 @@
+// Modified from https://bl.ocks.org/headwinds/3aa822e829c4677c9e586e319ec2c7de
+
 let width = window.innerWidth,
     height = window.innerHeight,
     padding = 2, // separation between same-color nodes
