@@ -54,143 +54,6 @@ function init() {
     window.addEventListener('resize', handleResize);
 }
 
-// Animations
-// figure.attr('id', 'fig')
-// let svg = d3.select('figure')
-//     .append('svg')
-//     .attr('id', 'pop')
-//     .attr('width', '100%')
-//     .attr('height', '100%');
-
-// let popSVG = document.getElementById('pop');
-// let paddingWithinNode = 2;
-// let paddingBetweenCluster = 60;
-// let figureCenterX = popSVG.clientWidth/2;
-// let figureCenterY = popSVG.clientHeight/2;
-
-// const nNodes = 20; // total number of nodes
-// const nClusters = 2; // number of distinct clusters although this should probably be handled by the pop param
-
-// // The largest node for each cluster.
-// const clusters = new Array(nClusters);
-
-// const fetchColor = function(i){
-//     let colorArray = ['#fd758d', '#e09f5b']
-//     return colorArray[i];
-// }
-
-// const getNodes = () => {
-
-//     const dist = 200;
-
-//     return d3.range(nNodes).map(function() {
-//         let i = Math.floor(Math.random() * nClusters),
-//             r = Math.sqrt((i + 1) / nClusters * -Math.log(Math.random())) * 1,
-//           d = {
-//             cluster: i,
-//             radius: r,
-//               x: Math.cos(i / nClusters * 2 * Math.PI) * dist + Math.random(),
-//               y: Math.sin(i / nClusters * 2 * Math.PI) * dist + Math.random()
-//           };
-//       return d;
-//     });
-// }
-
-// let nodes = getNodes();
-
-// // Move d to be adjacent to the cluster node.
-// // from: https://bl.ocks.org/mbostock/7881887
-// const cluster = () => {
-
-//   var nodes,
-//     strength = 1;
-
-//   function force (alpha) {
-
-//     // scale + curve alpha value
-//     alpha *= strength * alpha;
-
-//     nodes.forEach(function(d) {
-// 			var cluster = clusters[d.cluster];
-//     	if (cluster === d) return;
-      
-//       let x = d.x - cluster.x,
-//         y = d.y - cluster.y,
-//         l = Math.sqrt(x * x + y * y),
-//         r = d.radius + cluster.radius;
-
-//       if (l != r) {
-//         l = (l - r) / l * alpha;
-//         d.x -= x *= l;
-//         d.y -= y *= l;
-//         cluster.x += x;
-//         cluster.y += y;
-//       }
-//     });
-
-//   }
-
-//   force.initialize = function (_) {
-//     nodes = _;
-//   }
-
-//   force.strength = _ => {
-//     strength = _ == null ? strength : _;
-//     return force;
-//   };
-
-//   return force;
-
-// }
-  
-//   const removeAll = () => {
-//     const node = svg.selectAll("circle").remove();
-//   }
-    
-//   function drawNodes(targetCenter) {
-      
-//     const node = svg.selectAll("circle")
-//       .data(nodes)
-//     .enter().append("circle")
-//       .style("fill", function(d) { return fetchColor(d.cluster/10); });
-    
-//     const layoutTick = e => {
-//         node
-//         .attr("cx", function(d) { return d.x; })
-//         .attr("cy", function(d) { return d.y; })
-//         .attr("r", 3 );
-//       }
-    
-//     const force = d3.forceSimulation()
-//     // keep entire simulation balanced around screen center
-//     .force('center', d3.forceCenter(targetCenter.x, targetCenter.y))
-  
-//     // cluster by section
-//     .force('cluster', cluster()
-//       .strength(0.2))
-  
-//     // apply collision with padding
-//     .force('collide', d3.forceCollide(d => d.radius + paddingWithinNode)
-//       .strength(0.7))
-  
-//     .on('tick', layoutTick)
-//       .nodes(nodes);
-//   }
-  
-    
-//   const targets = {x: figureCenterX, y: figureCenterY};	
-    
-  
-    
-//   const draw = () => {
-//       let nodes = getNodes();
-//       drawNodes(targets);
-  
-//   }
-  
- 
-
-
 // kick things off
 init();
 
@@ -296,7 +159,24 @@ const removeAll = () => {
   const node = svg.selectAll("circle").remove();
 }
 
-function drawNodes(targetCenter) {
+let createForce = (nodesx, tick) => {
+  let simulation = d3.forceSimulation()
+  // keep entire simulation balanced around screen center
+  .force('center', d3.forceCenter(chartCenterX, chartCenterY))
+
+  // cluster by section
+  .force('cluster', cluster()
+    .strength(0.2))
+
+  // apply collision with padding
+  .force('collide', d3.forceCollide(d => d.radius + padding)
+    .strength(0.7))
+
+  .on('tick', tick)
+	.nodes(nodesx);
+}
+
+function drawNodes() {
     
   let node = svg.selectAll("circle")
     .data(nodes)
@@ -311,30 +191,14 @@ function drawNodes(targetCenter) {
       .attr("r", 3 );
 	}
   
-  let simulation = d3.forceSimulation()
-  // keep entire simulation balanced around screen center
-  .force('center', d3.forceCenter(targetCenter.x, targetCenter.y))
+  createForce(nodes, layoutTick)
 
-  // cluster by section
-  .force('cluster', cluster()
-    .strength(0.2))
-
-  // apply collision with padding
-  .force('collide', d3.forceCollide(d => d.radius + padding)
-    .strength(0.7))
-
-  .on('tick', layoutTick)
-	.nodes(nodes);
 }
 
   
-const targets = {x: chartCenterX, y: chartCenterY};	
-  
-
-  
 const draw = () => {
-    nodes = getNodes();
-    drawNodes(targets);
+    // nodes = getNodes();
+    drawNodes();
 
 }
 
@@ -354,20 +218,7 @@ const draw2 = () => {
   .style("fill", function(d) { return color[d.cluster]; });
   }
 
-  let simulation = d3.forceSimulation()
-  // keep entire simulation balanced around screen center
-  .force('center', d3.forceCenter(chartCenterX, chartCenterY))
-
-  // cluster by section
-  .force('cluster', cluster()
-    .strength(0.2))
-
-  // apply collision with padding
-  .force('collide', d3.forceCollide(d => d.radius + padding)
-    .strength(0.7))
-
-  .on('tick', layoutTick)
-	.nodes(nodes);
+createForce(nodes, layoutTick);
 
 
 }
