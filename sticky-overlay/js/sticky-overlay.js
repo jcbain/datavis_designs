@@ -176,13 +176,13 @@ let createForce = (nodesx, tick) => {
 	.nodes(nodesx);
 }
 
-function drawNodes() {
+const drawPopulation = () => {
     
   let node = svg.selectAll("circle")
     .data(nodes)
     .enter()
     .append("circle")
-    .style("fill", '#71c18c');
+    .style("fill", '#008974');
   
   let layoutTick = e => {
   	node
@@ -196,13 +196,13 @@ function drawNodes() {
 }
 
   
-const draw = () => {
-    // nodes = getNodes();
-    drawNodes();
+// const draw = () => {
+//     // nodes = getNodes();
+//     drawNodes();
 
-}
+// }
 
-const draw2 = () => {
+const splitPopulation = () => {
   nodes.forEach(d =>  {
     let dist = 200;
     d.x = Math.cos(d.cluster / m * 2 * Math.PI) * dist + Math.random();
@@ -232,7 +232,7 @@ createForce(nodes, layoutTick);
           return function(){} 
       });
 
-  updateFunctions[0] = draw;
-  updateFunctions[1] = draw2;
+  updateFunctions[0] = drawPopulation;
+  updateFunctions[1] = splitPopulation;
 
   // updateFunctions[2] = thirdAction;
