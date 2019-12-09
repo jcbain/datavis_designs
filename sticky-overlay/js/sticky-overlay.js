@@ -65,7 +65,7 @@ let widthSVG = '100%',
     heightSVG = '100%',
     padding = 2, // separation between same-color nodes
     clusterPadding = 6, // separation between different-color nodes
-    maxRadius = 2 // max radius of individual circles
+    maxRadius = 3 // max radius of individual circles
 
 const n = 2000, // total number of nodes
     m = 2; // number of distinct clusters

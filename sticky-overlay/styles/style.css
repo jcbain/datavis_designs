@@ -177,7 +177,7 @@ figure p {
     color: #fff;
     /* background-color: rgba(0, 0, 0, 0.1) */
 }
-s
+
 .step:last-child {
     margin-bottom: 0;
 }
@@ -194,3 +194,13 @@ s
     text-align: left;
     /* background-color: #3b3b3b; */
 }
+
+.step p:first-child:first-letter {
+    float: left;
+    font-family: Georgia;
+    font-size: 70px;
+    line-height: 60px;
+    padding-top: 4px;
+    padding-right: 8px;
+    padding-left: 3px;
+  }
