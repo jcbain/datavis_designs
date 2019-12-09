@@ -2,7 +2,7 @@ let heightFigure = document.getElementById('population-chart').clientHeight;
 let widthFigure = 750;
 let paddingFigure = 10;
 let nPops = 2;
-let nInds = 2000;
+let nInds = 3000;
 let radius = 50;
 
 
@@ -61,7 +61,7 @@ svg.selectAll('circle')
     .data(data)
     .enter()
     .append('circle')
-    .attr('cx', d => xScale(d.x) + (1 * d.cluster))
+    .attr('cx', d => xScale(d.x) + xScale(0) - paddingFigure)
     .attr('cy', d => yScale(d.y))
     .attr('r', 3)
     .attr('fill', 'white');
@@ -81,5 +81,5 @@ d3.select('.update')
             .transition()
             .duration(2000)
             .attr('cx', d => xScale(d.x) + (400 * d.cluster))
-            .attr('cy', d => xScale(d.y))
+            .attr('cy', d => yScale(d.y))
     })
