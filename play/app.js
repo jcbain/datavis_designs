@@ -51,6 +51,7 @@ yScale = d3.scaleLinear()
         paddingFigure  
     ]);
 
+
 svg = d3.select('figure')
     .append('svg')
     .attr('width', widthFigure)
@@ -64,7 +65,7 @@ svg.selectAll('circle')
     .attr('cx', d => xScale(d.x) + xScale(0) - paddingFigure)
     .attr('cy', d => yScale(d.y))
     .attr('r', 3)
-    .attr('fill', 'white');
+    .attr('fill', '#232423');
 
 d3.select('.update')
     .on('click', function(){
@@ -80,6 +81,10 @@ d3.select('.update')
             .data(data)
             .transition()
             .duration(2000)
-            .attr('cx', d => xScale(d.x) + (400 * d.cluster))
+            .attr('cx', d => xScale(d.x) + (200 * d.cluster))
             .attr('cy', d => yScale(d.y))
+            .attr('fill', d => {
+                if (d.cluster == 0) return '#fdc7d7';
+                else return '#e8e500'; 
+            })
     })
